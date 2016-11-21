@@ -2,16 +2,14 @@ package com.example.piotrek.tcpclientcmr;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -74,7 +72,7 @@ public class MainActivity extends Activity {
                 {
                     Message msg = new Message();
                     msg.what = 0x852;
-                    msg.obj = "68h\r\n" + "\r\n" + "217.153.10.141\r\n" + "172.21.77.137\r\n" + "09h\r\n" + "\r\n" + "\r\n" + "16h";
+                    msg.obj = clientThread.frameMessage() ;
                     clientThread.sendHandler.sendMessage(msg);
 
                 }
