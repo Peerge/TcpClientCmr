@@ -13,9 +13,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
-/**
- * Created by piotrek on 15.11.16.
- */
+
 
 public class ClientThread implements Runnable {
 
@@ -168,7 +166,7 @@ public class ClientThread implements Runnable {
 
     }
 
-    static public int GenerateChecksumCRC16(int bytes[]) {
+    public static int GenerateChecksumCRC16(int bytes[]) {
 
         int crc = 0xFFFF;
         int temp;
