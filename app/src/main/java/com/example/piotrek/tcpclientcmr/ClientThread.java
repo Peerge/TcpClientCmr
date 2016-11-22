@@ -6,6 +6,7 @@ import android.os.Message;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -134,6 +135,8 @@ public class ClientThread implements Runnable {
         String textCrc = String.valueOf(crc);
         Log.d("CRC", textCrc );
 
+        ByteArrayOutputStream bObj = new ByteArrayOutputStream();
+
         byte first = 0x68;
         byte frameLength = 0x5;
         byte[] receiveAdr = new byte[2];
@@ -149,20 +152,34 @@ public class ClientThread implements Runnable {
         CRC[1] = (byte) (0x8B & 0xff);
         byte end = 0x16;
 
-        byte[] request = new byte[11];
-        request[0] = first;
-        request[1] = frameLength;
-        request[2] = receiveAdr[0];
-        request[3] = receiveAdr[1];
-        request[4] = sendAdr[0];
-        request[5] = sendAdr[1];
-        request[6] = msg;
-        request[7] = answer;
-        request[8] = CRC[0];
-        request[9] = CRC[1];
-        request[10] = end;
+        bObj.write(first);
+        bObj.write(frameLength);
+        bObj.write(receiveAdr[0]);
+        bObj.write(receiveAdr[1]);
+        bObj.write(sendAdr[0]);
+        bObj.write(sendAdr[1]);
+        bObj.write(msg);
+        bObj.write(answer);
+        bObj.write(CRC[0]);
+        bObj.write(CRC[1]);
+        bObj.write(end);
 
-        return request;
+        byte[] Message = bObj.toByteArray();
+
+//        byte[] request = new byte[11];
+//        request[0] = first;
+//        request[1] = frameLength;
+//        request[2] = receiveAdr[0];
+//        request[3] = receiveAdr[1];
+//        request[4] = sendAdr[0];
+//        request[5] = sendAdr[1];
+//        request[6] = msg;
+//        request[7] = answer;
+//        request[8] = CRC[0];
+//        request[9] = CRC[1];
+//        request[10] = end;
+
+        return Message;
 
     }
 
