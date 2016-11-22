@@ -1,12 +1,9 @@
 package com.example.piotrek.tcpclientcmr;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -127,22 +124,34 @@ public class ClientThread implements Runnable {
         }
     }
 
-    public byte[] frameMessage() {
+    public static byte[] frameMessage() {
+
+        int crcInt[] = new int[4];
+        crcInt[0] = 5;
+        crcInt[1] = 65535;
+        crcInt[2] = 277;
+        crcInt[3] = 9;
+
+        int crc = GenerateChecksumCRC16(crcInt);
+        String textCrc = String.valueOf(crc);
+        Log.d("CRC", textCrc );
+
         byte first = 0x68;
-        byte frameLength = 0x5+0x0;
+        byte frameLength = 0x5;
         byte[] receiveAdr = new byte[2];
-        receiveAdr[0] = (byte) 0xff;
-        receiveAdr[1] = (byte) 0xff;
+        receiveAdr[0] = (byte) (0xff & 0xff);
+        receiveAdr[1] = (byte) (0xff & 0xff);
         byte[] sendAdr = new byte[2];
         sendAdr[0] = 0x1;
         sendAdr[1] = 0x15;
         byte msg = 0x09;
+        byte answer = 0x00;
         byte[] CRC = new byte[2];
-        CRC[0] = (byte) 0x82;
-        CRC[1] = (byte) 0x6F;
+        CRC[0] = (byte) (0xBA & 0xff);
+        CRC[1] = (byte) (0x8B & 0xff);
         byte end = 0x16;
 
-        byte[] request = new byte[10];
+        byte[] request = new byte[11];
         request[0] = first;
         request[1] = frameLength;
         request[2] = receiveAdr[0];
@@ -150,9 +159,10 @@ public class ClientThread implements Runnable {
         request[4] = sendAdr[0];
         request[5] = sendAdr[1];
         request[6] = msg;
-        request[7] = CRC[0];
-        request[8] = CRC[1];
-        request[9] = end;
+        request[7] = answer;
+        request[8] = CRC[0];
+        request[9] = CRC[1];
+        request[10] = end;
 
         return request;
 

@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import static com.example.piotrek.tcpclientcmr.ClientThread.frameMessage;
+
 public class MainActivity extends Activity {
 
     private final String TAG = "MainActivity";
@@ -72,7 +74,8 @@ public class MainActivity extends Activity {
                 {
                     Message msg = new Message();
                     msg.what = 0x852;
-                    msg.obj = clientThread.frameMessage() ;
+                    msg.obj = frameMessage();
+                    Log.d("Message", String.valueOf(frameMessage()));
                     clientThread.sendHandler.sendMessage(msg);
 
                 }
